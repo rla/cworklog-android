@@ -17,7 +17,8 @@ var login = document.getElementById('login');
 var running;
 var offline;
 
-fetch.addEventListener('click', function() {
+
+function loginAndFetchTimeLogs(){
     localStorage['user'] = user.value;
     localStorage['pass'] = pass.value;
 
@@ -38,7 +39,7 @@ fetch.addEventListener('click', function() {
     }, false);
     xhr.addEventListener('error', function() {
         offline = true;
-        message.innerHTML = 'XHR Error, continue in offline mode...';
+        message.innerHTML = 'Offline mode: using stored worklogs';
         var worklogs = JSON.parse(localStorage['worklogs']);
         populateTasks(worklogs);
     }, false);
@@ -50,7 +51,10 @@ fetch.addEventListener('click', function() {
 
     xhr.open('GET', server_url + '/api_worklog.php' + query, true);
     xhr.send(null);
+}
 
+fetch.addEventListener('click', function() {
+   loginAndFetchTimeLogs();
 }, false);
 
 
@@ -97,7 +101,8 @@ function populateTasks(worklogs) {
 
     worklogs.forEach(function(item) {
         var li = document.createElement('li');
-        li.innerHTML = item.title;
+        li.innerHTML = item.title + '(' + item.rate + '/hr) <a target="_blank" title="View Work Log" href="'+ server_url +'/work_log.php?wid='+item.id+'"><img style="width:16px;" src="images/view_details.gif"/></a> <a target="_blank" title="View Detailed Time Log" href="'+ server_url +'/time_log_show.php?wid='+item.id+'"><img style="width:16px;" src="images/timelog.png"/></a>';
+        
         li.addEventListener('click', function() {
             startTask(item);
         }, false);
@@ -112,7 +117,7 @@ function startTask(task) {
     
     var timelog = {
        work_log_id: running.id,
-       start_time: running.startTime,
+       start_time: new Date(running.startTime).toISOString(),
        stop_time: null
     }
     
@@ -124,7 +129,7 @@ function startTask(task) {
     
     tasks.className = 'hide';
     current.className = '';
-    stop.className = '';
+    stop.className = 'stopButton';
     message.innerHTML = 'Task started';
 }
 
@@ -203,7 +208,7 @@ function ready() {
     }
     if (savedPass !== undefined) {
         pass.value = savedPass;
-        fetch.click();
+        loginAndFetchTimeLogs();
     }
     
     var savedWorklogs = localStorage['worklogs'];
@@ -216,7 +221,7 @@ function ready() {
         running = JSON.parse(savedRunning);
         tasks.className = 'hide';
         current.className = '';
-        stop.className = '';
+        stop.className = 'stopButton';
     }
     setInterval(updateCurrent, 1000);
     fetch.disabled = false;

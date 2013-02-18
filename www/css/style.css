@@ -33,7 +33,7 @@ body {
 }
 
 button.startButton, button.stopButton {
-    min-height: 500px;
+    min-height: 30px;
     min-width: 30px;
     font-weight: bold;
     font-size: 32px;
@@ -48,7 +48,8 @@ button.stopButton{
     background: qlineargradient(
                 x1: 0, y1: 0, x2: 0, y2: 1,
                 stop: 0 #FFD1CF, stop: 0.5 #E11101 stop: 0.51 #E11101 stop: 1.0 #FF0000);
-	 color: white;
+	 background-color: red;
+    color: white;
     border: 1px solid #aaaaaa;
 }
 
