@@ -137,6 +137,7 @@ function startTask(task) {
     tasks.className = 'hide';
     current.className = '';
     $('#stopSliderContainer').show();
+    toggleRunning('on');
     message.innerHTML = 'Task started';
 }
 
@@ -232,14 +233,16 @@ function ready() {
         tasks.className = 'hide';
         current.className = '';
         $('#stopSliderContainer').show();
+        toggleRunning('on');
     }
     setInterval(updateCurrent, 1000);
     fetch.disabled = false;
     upload.disabled = false;
     local.disabled = false;
     message.innerHTML = hasUser ? 'Ready' : 'Please setup';
-    //switches();
+    switches();
     
+    /*
     $('#sldStop').sliderbutton({
 		text: "Stop Time Clock",
       slide: function(event, ui){
@@ -251,7 +254,7 @@ function ready() {
 		activate: function(){
         stopCurTimeLog();
       }
-	});
+	});*/
 }
 
 if (window.cordova) {
@@ -319,3 +322,28 @@ function switches(){
 
 
 }
+
+function toggleRunning(state){
+   if (state == 'on'){
+      $('div#toggle-stop div').removeClass('off').addClass('on').css('left', '100px');
+   }else{
+      $('div#toggle-stop div').removeClass('on').addClass('off').css('left', '0px');
+      stopCurTimeLog();
+   }
+}
+
+//Switch Widget Callback
+	//@ switchID - ID of the switch
+	//@ state - Current end state of the switch
+function switchCallback(args){
+	var switchID = args.id || null;
+	var state = args.state || null;
+
+		if(switchID === "toggle_running" && state === "on"){
+			toggleRunning('on');
+		}
+		if(switchID === "toggle_running" && state === "off"){
+         toggleRunning('off');
+		}
+	/*End Theme Specific Editible Code*/
+}	
