@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Example App</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<h1>CWorkLog</h1>
+<div id="message"></div>
+<label>Username: <input id="user" type="text"></label><br>
+<label>Password: <input id="pass" type="password"></label><br>
+<button id="fetch" disabled>Fetch tasks</button>
+<button id="upload" disabled>Upload times</button>
+<button id="local" disabled>Local timelog</button>
+<hr>
+<div id="tasks">
+    <h2>Tasks</h2>
+    <p class="help">Click on item to start.</p>
+    <ul id="list"></ul>
+</div>
+<div id="current" class="hide"></div>
+<button id="stop" class="hide">Stop</button>
+<div id="timelogs" class="hide">
+    <ul id="timelogs-list"></ul>
+    <button id="timelogs-close">Close</button>
+</div>
+<script src="js/app.js"></script>
+</body>
+</html>

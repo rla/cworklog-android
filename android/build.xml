@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CWorkLog" default="help">
+    <property name="target" value="Google Inc.:Google APIs:17" />
+    <property file="local.properties" />
+    <import file="${sdk.dir}/tools/ant/build.xml" />
+</project>

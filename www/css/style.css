@@ -1,0 +1,33 @@
+body {
+    font-family: sans-serif;
+}
+
+#tasks li {
+    font-size: 1.5em;
+}
+
+#current {
+    font-size: 1.5em;
+    color: red;
+}
+
+#timelogs {
+    background-color: black;
+    color: white;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 1em;
+}
+
+.help {
+    font-size: 0.8em;
+}
+
+.hide {
+    display: none;
+}

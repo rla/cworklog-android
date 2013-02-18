@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cordova>
+    <access origin="http://127.0.0.1*"/>
+    <access origin=".*"/>
+    <content src="index.html" />
+    <log level="DEBUG"/>
+    <preference name="useBrowserHistory" value="true" />
+    <preference name="exit-on-suspend" value="false" />
+    <plugins>
+        <plugin name="App" value="org.apache.cordova.App"/>
+        <plugin name="SplashScreen" value="org.apache.cordova.SplashScreen"/>
+    </plugins>
+</cordova>
+
