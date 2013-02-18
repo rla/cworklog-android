@@ -324,6 +324,7 @@ function switches(){
 }
 
 function toggleRunning(state){
+   if (state === true){ state = 'on'; }
    if (state == 'on'){
       $('div#toggle-stop div').removeClass('off').addClass('on').css('left', '100px');
    }else{
