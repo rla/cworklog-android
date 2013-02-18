@@ -1,9 +1,25 @@
 body {
     font-family: sans-serif;
+    background-color: black;
+    color: white;
+}
+
+.imglinks{
+  float: right;
+}
+
+#tasks ul {
+    list-style: none;
+    padding: 0.5em 0;
 }
 
 #tasks li {
-    font-size: 1.5em;
+    border-top: 1px solid #84bbf3;
+    padding: 1em 0;
+}
+
+#tasks li:last-child {
+    border-bottom: 1px solid #84bbf3;
 }
 
 #current {
@@ -11,7 +27,8 @@ body {
     color: red;
 }
 
-#timelogs {
+#timelogs,
+#form {
     background-color: black;
     color: white;
     position: fixed;
@@ -21,8 +38,46 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
-    padding: 1em;
+    padding: 1em 0;
 }
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type='text'],
+input[type='password'] {
+    display: block;
+    -moz-border-radius: 0.4em;
+    -webkit-border-radius: 0.4em;
+    border-radius: 0.4em;
+    border: 1px solid #84bbf3;
+    padding: 0.5em;
+    margin: 0.5em 0;
+}
+
+button {
+    display: block;
+    width: 100%;
+    margin: 0.5em 0;
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+    background: -moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+    padding: 0.5em;
+    color: white;
+    font-weight: bold;
+    background-color: #79bbff;
+    -moz-border-radius: 0.4em;
+    -webkit-border-radius: 0.4em;
+    border-radius: 0.4em;
+    border: 1px solid #84bbf3;
+    text-align: left;
+}
+/*
+button:active {
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+    background: -moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+}*/
 
 .help {
     font-size: 0.8em;
@@ -30,76 +85,4 @@ body {
 
 .hide {
     display: none;
-}
-
-button.startButton, button.stopButton {
-    min-height: 30px;
-    min-width: 30px;
-    font-weight: bold;
-    font-size: 32px;
-}
-
-/*
-#appWindow[started="true"] {
-    background-color: red;
-}*/
-
-button.stopButton{
-    background: qlineargradient(
-                x1: 0, y1: 0, x2: 0, y2: 1,
-                stop: 0 #FFD1CF, stop: 0.5 #E11101 stop: 0.51 #E11101 stop: 1.0 #FF0000);
-	 background-color: red;
-    color: white;
-    border: 1px solid #aaaaaa;
-}
-
-button {
-    background: qlineargradient(
-                x1: 0, y1: 0, x2: 0, y2: 1,
-                stop: 0 #ffffff, stop: 0.5 #eeeeee stop: 0.51 #cccccc stop: 1.0 #bbbbbb);
-
-    border: 1px solid #aaaaaa;
-
-    padding: 4px 4px 4px 4px;
-
-    color: #333333;
-
-	min-width: 60px;
-}
-
-button:hover
-{
-    background: qlineargradient(
-                x1: 0, y1: 0, x2: 0, y2: 1,
-                stop: 0 #ffffff, stop: 0.5 #eeeeee stop: 0.51 #dddddd stop: 1.0 #cccccc);
-
-    border-color: #aaaaaa;
-}
-
-button:disabled{
-	background: none;
-}
-
-button:default
-{
-    background: qlineargradient(
-                x1: 0, y1: 0, x2: 0, y2: 1,
-                stop: 0 #dddddd, stop: 0.5 #aaaaaa stop: 0.51 #999999 stop: 1.0 #aaaaaa);
-
-    border-color: #666666;
-	font-weight: bold;
-}
-
-button:default:hover
-{
-    background: qlineargradient(
-                x1: 0, y1: 0, x2: 0, y2: 1,
-                stop: 0 #eeeeee, stop: 0.5 #dddddd stop: 0.51 #cccccc stop: 1.0 #bbbbbb);
-
-    border-color: #999999;
-}
-
-button:pressed
-{
-    padding-top: 5px;
 }

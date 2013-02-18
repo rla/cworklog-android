@@ -12,11 +12,20 @@ var local = document.getElementById('local');
 var timelogs = document.getElementById('timelogs');
 var timelogsList = document.getElementById('timelogs-list');
 var timelogsClose = document.getElementById('timelogs-close');
-var login = document.getElementById('login');
-
+var setup = document.getElementById('setup');
+var setupOk = document.getElementById('setup-ok');
+var form = document.getElementById('form');
 var running;
-var offline;
 
+var click = window.cordova ? 'tap' : 'click';
+
+setup.addEventListener(click, function() {
+    form.className = '';
+}, false);
+
+setupOk.addEventListener(click, function() {
+    form.className = 'hide';
+}, false);
 
 function loginAndFetchTimeLogs(){
     localStorage['user'] = user.value;
@@ -29,8 +38,6 @@ function loginAndFetchTimeLogs(){
         if (json.error) {
             message.innerHTML = json.response.message;
         } else {
-            login.style.display = 'none';
-        
             var worklogs = json.response.work_logs;
             localStorage['worklogs'] = JSON.stringify(worklogs);
             populateTasks(worklogs);
@@ -62,7 +69,9 @@ fetch.addEventListener('click', function() {
  * Upload time logs stored in local storage
  * to cworklog server
  */
-function uploadTimeLogs(){
+function uploadTimeLogs(timelogs){
+    timelogs = timelogs || JSON.parse(localStorage['timelogs'] || '[]');
+     
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', function() {
         var json = JSON.parse(this.responseText);
@@ -82,7 +91,7 @@ function uploadTimeLogs(){
     var json = {
         u: user.value,
         p: pass.value,
-        entries: JSON.parse(localStorage['timelogs'] || '[]')
+        entries: timelogs
     };
 
     xhr.open('POST', server_url + '/api_timelog.php', true);
@@ -101,7 +110,7 @@ function populateTasks(worklogs) {
 
     worklogs.forEach(function(item) {
         var li = document.createElement('li');
-        li.innerHTML = item.title + '(' + item.rate + '/hr) <a target="_blank" title="View Work Log" href="'+ server_url +'/work_log.php?wid='+item.id+'"><img style="width:16px;" src="images/view_details.gif"/></a> <a target="_blank" title="View Detailed Time Log" href="'+ server_url +'/time_log_show.php?wid='+item.id+'"><img style="width:16px;" src="images/timelog.png"/></a>';
+        li.innerHTML = item.title + ' (' + parseFloat(item.rate).toFixed(2) + '/hr) <div class="imglinks"><a target="_blank" title="View Work Log" href="'+ server_url +'/work_log.php?wid='+item.id+'"><img style="width:24px;" src="images/view_details.gif"/></a> <a target="_blank" title="View Detailed Time Log" href="'+ server_url +'/time_log_show.php?wid='+item.id+'"><img style="width:24px;" src="images/timelog.png"/></a></div>';
         
         li.addEventListener('click', function() {
             startTask(item);
@@ -121,11 +130,9 @@ function startTask(task) {
        stop_time: null
     }
     
-    var timelogs = JSON.parse(localStorage['timelogs'] || '[]');
+    var timelogs = [];
     timelogs.push(timelog);
-    localStorage['timelogs'] = JSON.stringify(timelogs);
-    
-    uploadTimeLogs();
+    uploadTimeLogs(timelogs);
     
     tasks.className = 'hide';
     current.className = '';
@@ -167,7 +174,7 @@ function updateCurrent() {
     }
 }
 
-local.addEventListener('click', function() {
+local.addEventListener(click, function() {
     var logs = JSON.parse(localStorage['timelogs'] || '[]');
     var worklogs = JSON.parse(localStorage['worklogs'] || '[]');
 
@@ -196,15 +203,17 @@ local.addEventListener('click', function() {
     timelogs.className = '';
 }, false);
 
-timelogsClose.addEventListener('click', function() {
+timelogsClose.addEventListener(click, function() {
     timelogs.className = 'hide';
 }, false);
 
 function ready() {
+    var hasUser = false;
     var savedUser = localStorage['user'];
     var savedPass = localStorage['pass'];
     if (savedUser !== undefined) {
         user.value = savedUser;
+        hasUser = true;
     }
     if (savedPass !== undefined) {
         pass.value = savedPass;
@@ -227,7 +236,7 @@ function ready() {
     fetch.disabled = false;
     upload.disabled = false;
     local.disabled = false;
-    message.innerHTML = 'Ready';
+    message.innerHTML = hasUser ? 'Ready' : 'Please setup';
 }
 
 if (window.cordova) {
