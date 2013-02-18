@@ -1,9 +1,21 @@
 body {
     font-family: sans-serif;
+    background-color: black;
+    color: white;
+}
+
+#tasks ul {
+    list-style: none;
+    padding: 0.5em 0;
 }
 
 #tasks li {
-    font-size: 1.5em;
+    border-top: 1px solid #84bbf3;
+    padding: 1em 0;
+}
+
+#tasks li:last-child {
+    border-bottom: 1px solid #84bbf3;
 }
 
 #current {
@@ -11,7 +23,8 @@ body {
     color: red;
 }
 
-#timelogs {
+#timelogs,
+#form {
     background-color: black;
     color: white;
     position: fixed;
@@ -21,8 +34,46 @@ body {
     height: 100%;
     width: 100%;
     margin: 0;
-    padding: 1em;
+    padding: 1em 0;
 }
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type='text'],
+input[type='password'] {
+    display: block;
+    -moz-border-radius: 0.4em;
+    -webkit-border-radius: 0.4em;
+    border-radius: 0.4em;
+    border: 1px solid #84bbf3;
+    padding: 0.5em;
+    margin: 0.5em 0;
+}
+
+button {
+    display: block;
+    width: 100%;
+    margin: 0.5em 0;
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5) );
+    background: -moz-linear-gradient( center top, #79bbff 5%, #378de5 100% );
+    padding: 0.5em;
+    color: white;
+    font-weight: bold;
+    background-color: #79bbff;
+    -moz-border-radius: 0.4em;
+    -webkit-border-radius: 0.4em;
+    border-radius: 0.4em;
+    border: 1px solid #84bbf3;
+    text-align: left;
+}
+/*
+button:active {
+    background: -webkit-gradient( linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff) );
+    background: -moz-linear-gradient( center top, #378de5 5%, #79bbff 100% );
+}*/
 
 .help {
     font-size: 0.8em;

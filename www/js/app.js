@@ -11,9 +11,22 @@ var local = document.getElementById('local');
 var timelogs = document.getElementById('timelogs');
 var timelogsList = document.getElementById('timelogs-list');
 var timelogsClose = document.getElementById('timelogs-close');
+var setup = document.getElementById('setup');
+var setupOk = document.getElementById('setup-ok');
+var form = document.getElementById('form');
 var running;
 
-fetch.addEventListener('click', function() {
+var click = window.cordova ? 'tap' : 'click';
+
+setup.addEventListener(click, function() {
+    form.className = '';
+}, false);
+
+setupOk.addEventListener(click, function() {
+    form.className = 'hide';
+}, false);
+
+fetch.addEventListener(click, function() {
     localStorage['user'] = user.value;
     localStorage['pass'] = pass.value;
 
@@ -43,7 +56,7 @@ fetch.addEventListener('click', function() {
 
 }, false);
 
-upload.addEventListener('click', function() {
+upload.addEventListener(click, function() {
     localStorage['user'] = user.value;
     localStorage['pass'] = pass.value;
 
@@ -80,7 +93,7 @@ function populateTasks(worklogs) {
 
     worklogs.forEach(function(item) {
         var li = document.createElement('li');
-        li.innerHTML = item.title;
+        li.innerHTML = '<i class="icon-tasks"></i> ' + item.title;
         li.addEventListener('click', function() {
             startTask(item);
         }, false);
@@ -98,7 +111,7 @@ function startTask(task) {
     message.innerHTML = 'Task started';
 }
 
-stop.addEventListener('click', function() {
+stop.addEventListener(click, function() {
     var timelog = {
         work_log_id: running.id,
         start_time: new Date(running.startTime).toISOString(),
@@ -126,7 +139,7 @@ function updateCurrent() {
     }
 }
 
-local.addEventListener('click', function() {
+local.addEventListener(click, function() {
     var logs = JSON.parse(localStorage['timelogs'] || '[]');
     var worklogs = JSON.parse(localStorage['worklogs'] || '[]');
 
@@ -155,15 +168,17 @@ local.addEventListener('click', function() {
     timelogs.className = '';
 }, false);
 
-timelogsClose.addEventListener('click', function() {
+timelogsClose.addEventListener(click, function() {
     timelogs.className = 'hide';
 }, false);
 
 function ready() {
+    var hasUser = false;
     var savedUser = localStorage['user'];
     var savedPass = localStorage['pass'];
     if (savedUser !== undefined) {
         user.value = savedUser;
+        hasUser = true;
     }
     if (savedPass !== undefined) {
         pass.value = savedPass;
@@ -183,7 +198,7 @@ function ready() {
     fetch.disabled = false;
     upload.disabled = false;
     local.disabled = false;
-    message.innerHTML = 'Ready';
+    message.innerHTML = hasUser ? 'Ready' : 'Please setup';
 }
 
 if (window.cordova) {

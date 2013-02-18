@@ -3,16 +3,32 @@
 <head>
     <title>Example App</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
 </head>
 <body>
 <h1>CWorkLog</h1>
 <div id="message"></div>
-<label>Username: <input id="user" type="text"></label><br>
-<label>Password: <input id="pass" type="password"></label><br>
-<button id="fetch" disabled>Fetch tasks</button>
-<button id="upload" disabled>Upload times</button>
-<button id="local" disabled>Local timelog</button>
-<hr>
+<div id="form" class="hide">
+    <label for="user">Username</label>
+    <input id="user" type="text"></label>
+    <label for="pass">Password</label>
+    <input id="pass" type="password"></label>
+    <button id="setup-ok">
+        <i class="icon-ok"></i> OK
+    </button>
+</div>
+<button id="setup">
+    <i class="icon-cog"></i> Setup
+</button>
+<button id="fetch" disabled>
+    <i class="icon-arrow-down"></i> Fetch tasks
+</button>
+<button id="upload" disabled>
+    <i class="icon-arrow-up"></i> Upload times
+</button>
+<button id="local" disabled>
+    <i class="icon-table"></i> Local timelog
+</button>
 <div id="tasks">
     <h2>Tasks</h2>
     <p class="help">Click on item to start.</p>
@@ -22,7 +38,9 @@
 <button id="stop" class="hide">Stop</button>
 <div id="timelogs" class="hide">
     <ul id="timelogs-list"></ul>
-    <button id="timelogs-close">Close</button>
+    <button id="timelogs-close">
+        <i class="icon-ok"></i> Close
+    </button>
 </div>
 <script src="js/app.js"></script>
 </body>
