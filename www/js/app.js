@@ -1,3 +1,4 @@
+var server_url = 'https://cworklog.com';
 var user = document.getElementById('user');
 var pass = document.getElementById('pass');
 var fetch = document.getElementById('fetch');
@@ -11,7 +12,10 @@ var local = document.getElementById('local');
 var timelogs = document.getElementById('timelogs');
 var timelogsList = document.getElementById('timelogs-list');
 var timelogsClose = document.getElementById('timelogs-close');
+var login = document.getElementById('login');
+
 var running;
+var offline;
 
 fetch.addEventListener('click', function() {
     localStorage['user'] = user.value;
@@ -19,10 +23,13 @@ fetch.addEventListener('click', function() {
 
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', function() {
+        offline = false;
         var json = JSON.parse(this.responseText);
         if (json.error) {
             message.innerHTML = json.response.message;
         } else {
+            login.style.display = 'none';
+        
             var worklogs = json.response.work_logs;
             localStorage['worklogs'] = JSON.stringify(worklogs);
             populateTasks(worklogs);
@@ -30,7 +37,10 @@ fetch.addEventListener('click', function() {
         }
     }, false);
     xhr.addEventListener('error', function() {
-        message.innerHTML = 'XHR error occurred';
+        offline = true;
+        message.innerHTML = 'XHR Error, continue in offline mode...';
+        var worklogs = JSON.parse(localStorage['worklogs']);
+        populateTasks(worklogs);
     }, false);
 
     var query = '?u=' + encodeURIComponent(user.value) +
@@ -38,15 +48,17 @@ fetch.addEventListener('click', function() {
 
     message.innerHTML = 'Fetching tasks ...';
 
-    xhr.open('GET', 'https://cworklog.com/api_worklog.php' + query, true);
+    xhr.open('GET', server_url + '/api_worklog.php' + query, true);
     xhr.send(null);
 
 }, false);
 
-upload.addEventListener('click', function() {
-    localStorage['user'] = user.value;
-    localStorage['pass'] = pass.value;
 
+/** 
+ * Upload time logs stored in local storage
+ * to cworklog server
+ */
+function uploadTimeLogs(){
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', function() {
         var json = JSON.parse(this.responseText);
@@ -58,7 +70,7 @@ upload.addEventListener('click', function() {
         }
     }, false);
     xhr.addEventListener('error', function() {
-        message.innerHTML = 'XHR error occurred';
+        message.innerHTML = 'Offline mode: Cannot upload time logs';
     }, false);
 
     message.innerHTML = 'Uploading times ...';
@@ -69,10 +81,15 @@ upload.addEventListener('click', function() {
         entries: JSON.parse(localStorage['timelogs'] || '[]')
     };
 
-    xhr.open('POST', 'https://cworklog.com/api_timelog.php', true);
+    xhr.open('POST', server_url + '/api_timelog.php', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(json));
+}
 
+upload.addEventListener('click', function() {
+    localStorage['user'] = user.value;
+    localStorage['pass'] = pass.value;
+    uploadTimeLogs();
 }, false);
 
 function populateTasks(worklogs) {
@@ -92,6 +109,19 @@ function startTask(task) {
     task.startTime = Date.now();
     running = task;
     localStorage['running'] = JSON.stringify(task);
+    
+    var timelog = {
+       work_log_id: running.id,
+       start_time: running.startTime,
+       stop_time: null
+    }
+    
+    var timelogs = JSON.parse(localStorage['timelogs'] || '[]');
+    timelogs.push(timelog);
+    localStorage['timelogs'] = JSON.stringify(timelogs);
+    
+    uploadTimeLogs();
+    
     tasks.className = 'hide';
     current.className = '';
     stop.className = '';
@@ -108,11 +138,17 @@ stop.addEventListener('click', function() {
     timelogs.push(timelog);
     localStorage['timelogs'] = JSON.stringify(timelogs);
     localStorage.removeItem('running');
+    
+    
+    
     running = undefined;
     tasks.className = '';
     current.className = 'hide';
     stop.className = 'hide';
     message.innerHTML = 'Task stopped';
+    
+    //go ahead and upload to server
+    uploadTimeLogs();
 }, false);
 
 function updateCurrent() {
@@ -167,11 +203,14 @@ function ready() {
     }
     if (savedPass !== undefined) {
         pass.value = savedPass;
+        fetch.click();
     }
+    
     var savedWorklogs = localStorage['worklogs'];
     if (savedWorklogs !== undefined) {
         populateTasks(JSON.parse(savedWorklogs));
     }
+    
     var savedRunning = localStorage['running'];
     if (savedRunning !== undefined) {
         running = JSON.parse(savedRunning);
