@@ -12,20 +12,11 @@ var local = document.getElementById('local');
 var timelogs = document.getElementById('timelogs');
 var timelogsList = document.getElementById('timelogs-list');
 var timelogsClose = document.getElementById('timelogs-close');
-var setup = document.getElementById('setup');
-var setupOk = document.getElementById('setup-ok');
-var form = document.getElementById('form');
+
+
 var running;
+var offline;
 
-var click = window.cordova ? 'tap' : 'click';
-
-setup.addEventListener(click, function() {
-    form.className = '';
-}, false);
-
-setupOk.addEventListener(click, function() {
-    form.className = 'hide';
-}, false);
 
 function loginAndFetchTimeLogs(){
     localStorage['user'] = user.value;
@@ -110,7 +101,7 @@ function populateTasks(worklogs) {
 
     worklogs.forEach(function(item) {
         var li = document.createElement('li');
-        li.innerHTML = item.title + ' (' + parseFloat(item.rate).toFixed(2) + '/hr) <div class="imglinks"><a target="_blank" title="View Work Log" href="'+ server_url +'/work_log.php?wid='+item.id+'"><img style="width:24px;" src="images/view_details.gif"/></a> <a target="_blank" title="View Detailed Time Log" href="'+ server_url +'/time_log_show.php?wid='+item.id+'"><img style="width:24px;" src="images/timelog.png"/></a></div>';
+        li.innerHTML = item.title + '(' + item.rate + '/hr) <div class="imglinks"><a target="_blank" title="View Work Log" href="'+ server_url +'/work_log.php?wid='+item.id+'"><img style="width:24px;" src="images/view_details.gif"/></a> <a target="_blank" title="View Detailed Time Log" href="'+ server_url +'/time_log_show.php?wid='+item.id+'"><img style="width:24px;" src="images/timelog.png"/></a></div>';
         
         li.addEventListener('click', function() {
             startTask(item);
@@ -136,33 +127,32 @@ function startTask(task) {
     
     tasks.className = 'hide';
     current.className = '';
-    $('#stopSliderContainer').show();
+    stop.className = 'stopButton';
     message.innerHTML = 'Task started';
 }
 
-
-function stopCurTimeLog(){
-         if (!running){ return false; }
-         
-          var timelog = {
-              work_log_id: running.id,
-              start_time: new Date(running.startTime).toISOString(),
-              stop_time: new Date().toISOString()
-          };
-          var timelogs = JSON.parse(localStorage['timelogs'] || '[]');
-          timelogs.push(timelog);
-          localStorage['timelogs'] = JSON.stringify(timelogs);
-          localStorage.removeItem('running');
-          
-          running = undefined;
-          tasks.className = '';
-          current.className = 'hide';
-          $('#stopSliderContainer').hide();
-          message.innerHTML = 'Task stopped';
-          
-          //go ahead and upload to server
-          uploadTimeLogs();
-}
+stop.addEventListener('click', function() {
+    var timelog = {
+        work_log_id: running.id,
+        start_time: new Date(running.startTime).toISOString(),
+        stop_time: new Date().toISOString()
+    };
+    var timelogs = JSON.parse(localStorage['timelogs'] || '[]');
+    timelogs.push(timelog);
+    localStorage['timelogs'] = JSON.stringify(timelogs);
+    localStorage.removeItem('running');
+    
+    
+    
+    running = undefined;
+    tasks.className = '';
+    current.className = 'hide';
+    stop.className = 'hide';
+    message.innerHTML = 'Task stopped';
+    
+    //go ahead and upload to server
+    uploadTimeLogs();
+}, false);
 
 function updateCurrent() {
     if (running !== undefined) {
@@ -175,7 +165,7 @@ function updateCurrent() {
     }
 }
 
-local.addEventListener(click, function() {
+local.addEventListener('click', function() {
     var logs = JSON.parse(localStorage['timelogs'] || '[]');
     var worklogs = JSON.parse(localStorage['worklogs'] || '[]');
 
@@ -204,17 +194,15 @@ local.addEventListener(click, function() {
     timelogs.className = '';
 }, false);
 
-timelogsClose.addEventListener(click, function() {
+timelogsClose.addEventListener('click', function() {
     timelogs.className = 'hide';
 }, false);
 
 function ready() {
-    var hasUser = false;
     var savedUser = localStorage['user'];
     var savedPass = localStorage['pass'];
     if (savedUser !== undefined) {
         user.value = savedUser;
-        hasUser = true;
     }
     if (savedPass !== undefined) {
         pass.value = savedPass;
@@ -231,91 +219,17 @@ function ready() {
         running = JSON.parse(savedRunning);
         tasks.className = 'hide';
         current.className = '';
-        $('#stopSliderContainer').show();
+        stop.className = 'stopButton';
     }
     setInterval(updateCurrent, 1000);
     fetch.disabled = false;
     upload.disabled = false;
     local.disabled = false;
-    message.innerHTML = hasUser ? 'Ready' : 'Please setup';
-    //switches();
-    
-    $('#sldStop').sliderbutton({
-		text: "Stop Time Clock",
-      slide: function(event, ui){
-         if (ui.value >= 75){ 
-            $(this).css('color', 'red');
-         }
-      },
-      // {sliderbuttonslide}: Triggered when the slider handle is moving. The callback is provided the arguments event and ui where ui.value is the current value (position) of the handle in the range [0,100]. 0 means the slider is at the start (idle position) and 100 means the slider is at the end (activated).
-		activate: function(){
-        stopCurTimeLog();
-      }
-	});
+    message.innerHTML = 'Ready';
 }
 
 if (window.cordova) {
     document.addEventListener('deviceready', ready, false);
 } else {
     window.addEventListener('load', ready, false);
-}
-
-/*Switches Widget Plugin
-*	This plugin creates native-like switches.  Each element with the secified class
-*		and correct DOM structure will create a working switch.  There is no 'universal'
-*		Widget solution for every theme.  It should be customized.
-*/
-function switches(){
-
-	var switches = document.getElementsByClassName('switch');
-
-	for (var i = 0; i < switches.length; i++)
-	{
-		switches[i].firstChild.ontouchstart = function(e)
-		{
-				leftVal = parseInt(this.style.left, 10);
-				touch = event.touches[0];
-				x = touch.pageX;
-
-				this.ontouchmove = function(e){
-					pos = e.changedTouches[0].pageX;
-					curleftVal = parseInt(this.style.left, 10);
-					if( pos < x){
-						if(curleftVal> 0){
-							this.style.left = leftVal - (x - pos)+"px";
-							if( curleftVal >= 49  && this.classList.contains('on') === false){this.className = "on"; }
-							if(curleftVal <= 50 && this.classList.contains('on') === true){this.className = "";}  
-
-						}else{
-							this.style.left = 0+"px";
-							this.className = "";	
-						}
-					}
-
-					if( pos > x){
-						if(curleftVal<100){
-							this.style.left = leftVal + (pos - x)+"px";
-
-							if( curleftVal >= 49  && this.classList.contains('on') === false){this.className = "on"; }
-							if(curleftVal <= 50 && this.classList.contains('on') === true){this.className = "";}  
-
-						}else{
-							this.style.left = 100+"px";	
-							this.className = "on"; 
-						}
-					}
-
-				}
-
-				this.ontouchend = function(e){
-					curleftVal = parseInt(this.style.left, 10);
-					switchID = this.parentNode.id
-					if(curleftVal >= 49){if(curleftVal != 100){this.style.left = "100px"; this.className = "on";}  switchCallback({state:"on", id:switchID});}
-					if(curleftVal <= 50){if(curleftVal != 100){this.style.left = "0px"; this.className = "";} switchCallback({state:"off", id:switchID});}	  	
-				}
-		}
-	}
-
-
-
 }

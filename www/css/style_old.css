@@ -1,0 +1,105 @@
+body {
+    font-family: sans-serif;
+}
+
+#tasks li {
+    font-size: 1.5em;
+}
+
+#current {
+    font-size: 1.5em;
+    color: red;
+}
+
+#timelogs {
+    background-color: black;
+    color: white;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 1em;
+}
+
+.help {
+    font-size: 0.8em;
+}
+
+.hide {
+    display: none;
+}
+
+button.startButton, button.stopButton {
+    min-height: 30px;
+    min-width: 30px;
+    font-weight: bold;
+    font-size: 32px;
+}
+
+/*
+#appWindow[started="true"] {
+    background-color: red;
+}*/
+
+button.stopButton{
+    background: qlineargradient(
+                x1: 0, y1: 0, x2: 0, y2: 1,
+                stop: 0 #FFD1CF, stop: 0.5 #E11101 stop: 0.51 #E11101 stop: 1.0 #FF0000);
+	 background-color: red;
+    color: white;
+    border: 1px solid #aaaaaa;
+}
+
+button {
+    background: qlineargradient(
+                x1: 0, y1: 0, x2: 0, y2: 1,
+                stop: 0 #ffffff, stop: 0.5 #eeeeee stop: 0.51 #cccccc stop: 1.0 #bbbbbb);
+
+    border: 1px solid #aaaaaa;
+
+    padding: 4px 4px 4px 4px;
+
+    color: #333333;
+
+	min-width: 60px;
+}
+
+button:hover
+{
+    background: qlineargradient(
+                x1: 0, y1: 0, x2: 0, y2: 1,
+                stop: 0 #ffffff, stop: 0.5 #eeeeee stop: 0.51 #dddddd stop: 1.0 #cccccc);
+
+    border-color: #aaaaaa;
+}
+
+button:disabled{
+	background: none;
+}
+
+button:default
+{
+    background: qlineargradient(
+                x1: 0, y1: 0, x2: 0, y2: 1,
+                stop: 0 #dddddd, stop: 0.5 #aaaaaa stop: 0.51 #999999 stop: 1.0 #aaaaaa);
+
+    border-color: #666666;
+	font-weight: bold;
+}
+
+button:default:hover
+{
+    background: qlineargradient(
+                x1: 0, y1: 0, x2: 0, y2: 1,
+                stop: 0 #eeeeee, stop: 0.5 #dddddd stop: 0.51 #cccccc stop: 1.0 #bbbbbb);
+
+    border-color: #999999;
+}
+
+button:pressed
+{
+    padding-top: 5px;
+}

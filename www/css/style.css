@@ -49,9 +49,6 @@ label {
 input[type='text'],
 input[type='password'] {
     display: block;
-    -moz-border-radius: 0.4em;
-    -webkit-border-radius: 0.4em;
-    border-radius: 0.4em;
     border: 1px solid #84bbf3;
     padding: 0.5em;
     margin: 0.5em 0;
@@ -86,3 +83,56 @@ button:active {
 .hide {
     display: none;
 }
+
+.switch
+{
+	position: relative;
+	overflow:hidden;
+	border:2px solid  #393939;
+	background-color:#141414;
+	width:200px;
+	height:50px;
+	border-radius:10px;
+}
+
+.switch>div
+{
+	height:100%;
+	width:100px;
+	position:absolute;
+	border-radius:8px;
+	background-image: -webkit-linear-gradient(bottom, rgb(96,111,117) 54%, rgb(134,154,161) 91%);	
+	color:#ccedfe;
+	z-index:2;
+	left:0px;
+/*	-webkit-transition: left .1s;
+-webkit-transition: all 0.3s ease-out;
+*/}
+
+.switch>div:first-child:before
+{
+	position:absolute;
+	top:0px;
+	right:0px;
+	left:0px;
+	bottom:0px;
+	text-align:center;
+	line-height:50px;
+	font-size:24px;
+	display:block;
+	content:"OFF";
+}
+
+.switch>div.on
+{
+	background-image: -webkit-linear-gradient(bottom, rgb(82,147,63) 55%, rgb(112,198,86) 100%);	
+	color:#efff97;
+
+}
+
+.switch>div.on:before
+{
+	content:"ON";
+}
+
+.containing-element .ui-slider-switch { width: 9em; } 
