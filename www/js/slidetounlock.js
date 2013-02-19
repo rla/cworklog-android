@@ -9,7 +9,7 @@ $(function() {
    
    function calcChangeWidth(){
       var window_btn_offset = 200;
-      var change_width = $(window).width()-window_btn_offset < 550 ? $(window).width()-window_btn_offset : 550;
+      var change_width = $(window).width()-window_btn_offset; // < 550 ? $(window).width()-window_btn_offset : 550;
       return change_width;
    }
 
