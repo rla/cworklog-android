@@ -6,12 +6,18 @@ $(function() {
       });
       if (typeof(slidetounlock_callback) == 'function'){ slidetounlock_callback(this); }  
    }
+   
+   function calcChangeWidth(){
+      var window_btn_offset = 200;
+      var change_width = $(window).width()-window_btn_offset < 550 ? $(window).width()-window_btn_offset : 550;
+      return change_width;
+   }
 
 	$("#slider").draggable({
 		axis: 'x',
 		containment: 'parent',
 		drag: function(event, ui) {
-			if (ui.position.left > 550) {
+			if (ui.position.left > calcChangeWidth()) {
 				slidetounlock_unlocked();
 			} else {
 			    // Apparently Safari isn't allowing partial opacity on text with background clip? Not sure.
@@ -19,7 +25,7 @@ $(function() {
 			}
 		},
 		stop: function(event, ui) {
-			if (ui.position.left < 551) {
+			if (ui.position.left <= calcChangeWidth()) {
 				$(this).animate({
 					left: 0
 				})
@@ -34,7 +40,7 @@ $(function() {
 	    var touch = event.touches[0];
 	    curX = touch.pageX - this.offsetLeft - 73;
 	    if(curX <= 0) return;
-	    if(curX > 550){
+	    if(curX > calcChangeWidth()){
 	    	slidetounlock_unlocked();
 	    }
 	   	el.style.webkitTransform = 'translateX(' + curX + 'px)'; 
