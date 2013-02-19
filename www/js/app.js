@@ -137,8 +137,9 @@ function startTask(task) {
     tasks.className = 'hide';
     current.className = '';
     $('#stopSliderContainer').show();
-    toggleRunning('on');
+    $('#slidetounlock').fadeIn(500);
     message.innerHTML = 'Task started';
+    updateCurrent();
 }
 
 
@@ -170,7 +171,7 @@ function updateCurrent() {
         var diff = Math.floor((Date.now() - running.startTime) / 1000);
         var minutes = Math.floor(diff / 60);
         var seconds = Math.floor(diff % 60);
-        current.innerHTML = running.title + ': ' + minutes + 'm ' + seconds + 's';
+        current.innerHTML = running.title + ' (' + running.company_name + ') ' + ': ' + minutes + 'm ' + seconds + 's';
     } else {
         current.innerHTML = '';
     }
@@ -233,28 +234,13 @@ function ready() {
         tasks.className = 'hide';
         current.className = '';
         $('#stopSliderContainer').show();
-        toggleRunning('on');
+        $('#slidetounlock').fadeIn(500);
     }
     setInterval(updateCurrent, 1000);
     fetch.disabled = false;
     upload.disabled = false;
     local.disabled = false;
     message.innerHTML = hasUser ? 'Ready' : 'Please setup';
-    switches();
-    
-    /*
-    $('#sldStop').sliderbutton({
-		text: "Stop Time Clock",
-      slide: function(event, ui){
-         if (ui.value >= 75){ 
-            $(this).css('color', 'red');
-         }
-      },
-      // {sliderbuttonslide}: Triggered when the slider handle is moving. The callback is provided the arguments event and ui where ui.value is the current value (position) of the handle in the range [0,100]. 0 means the slider is at the start (idle position) and 100 means the slider is at the end (activated).
-		activate: function(){
-        stopCurTimeLog();
-      }
-	});*/
 }
 
 if (window.cordova) {
@@ -263,88 +249,9 @@ if (window.cordova) {
     window.addEventListener('load', ready, false);
 }
 
-/*Switches Widget Plugin
-*	This plugin creates native-like switches.  Each element with the secified class
-*		and correct DOM structure will create a working switch.  There is no 'universal'
-*		Widget solution for every theme.  It should be customized.
-*/
-function switches(){
-
-	var switches = document.getElementsByClassName('switch');
-
-	for (var i = 0; i < switches.length; i++)
-	{
-		switches[i].firstChild.ontouchstart = function(e)
-		{
-				leftVal = parseInt(this.style.left, 10);
-				touch = event.touches[0];
-				x = touch.pageX;
-
-				this.ontouchmove = function(e){
-					pos = e.changedTouches[0].pageX;
-					curleftVal = parseInt(this.style.left, 10);
-					if( pos < x){
-						if(curleftVal> 0){
-							this.style.left = leftVal - (x - pos)+"px";
-							if( curleftVal >= 49  && this.classList.contains('on') === false){this.className = "on"; }
-							if(curleftVal <= 50 && this.classList.contains('on') === true){this.className = "";}  
-
-						}else{
-							this.style.left = 0+"px";
-							this.className = "";	
-						}
-					}
-
-					if( pos > x){
-						if(curleftVal<100){
-							this.style.left = leftVal + (pos - x)+"px";
-
-							if( curleftVal >= 49  && this.classList.contains('on') === false){this.className = "on"; }
-							if(curleftVal <= 50 && this.classList.contains('on') === true){this.className = "";}  
-
-						}else{
-							this.style.left = 100+"px";	
-							this.className = "on"; 
-						}
-					}
-
-				}
-
-				this.ontouchend = function(e){
-					curleftVal = parseInt(this.style.left, 10);
-					switchID = this.parentNode.id
-					if(curleftVal >= 49){if(curleftVal != 100){this.style.left = "100px"; this.className = "on";}  switchCallback({state:"on", id:switchID});}
-					if(curleftVal <= 50){if(curleftVal != 100){this.style.left = "0px"; this.className = "";} switchCallback({state:"off", id:switchID});}	  	
-				}
-		}
-	}
-
-
-
+slidetounlock_callback = function(){
+     stopCurTimeLog();
+     $('#slidetounlock_sound')[0].play();
 }
 
-function toggleRunning(state){
-   if (state === true){ state = 'on'; }
-   if (state == 'on'){
-      $('div#toggle-stop div').removeClass('off').addClass('on').css('left', '100px');
-   }else{
-      $('div#toggle-stop div').removeClass('on').addClass('off').css('left', '0px');
-      stopCurTimeLog();
-   }
-}
 
-//Switch Widget Callback
-	//@ switchID - ID of the switch
-	//@ state - Current end state of the switch
-function switchCallback(args){
-	var switchID = args.id || null;
-	var state = args.state || null;
-
-		if(switchID === "toggle_running" && state === "on"){
-			toggleRunning('on');
-		}
-		if(switchID === "toggle_running" && state === "off"){
-         toggleRunning('off');
-		}
-	/*End Theme Specific Editible Code*/
-}	
