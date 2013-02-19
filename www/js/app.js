@@ -138,13 +138,14 @@ function startTask(task) {
     var timelogs = [];
     timelogs.push(timelog);
     uploadTimeLogs(timelogs);
+    updateCurrent();
     
     $(list).hide();
     current.className = '';
     $('#stopSliderContainer').show();
     $('#slidetounlock').fadeIn(500);
     message.innerHTML = 'Task started';
-    updateCurrent();
+    
 }
 
 
@@ -176,7 +177,7 @@ function updateCurrent() {
         var diff = Math.floor((Date.now() - running.startTime) / 1000);
         var minutes = Math.floor(diff / 60);
         var seconds = Math.floor(diff % 60);
-        current.innerHTML = running.title + ' - ' + running.company_name + ' (' + parseFloat(running.rate).toFixed(2) + ')' + ' ' + minutes + 'm ' + seconds + 's';
+        current.innerHTML = running.title + ' - ' + running.company_name + ' ($' + parseFloat(running.rate).toFixed(2) + ')' + ' ' + minutes + 'm ' + seconds + 's';
     } else {
         current.innerHTML = '';
     }
@@ -221,6 +222,8 @@ timelogsClose.addEventListener(click, function() {
 }, false);
 
 function ready() {
+    setInterval(updateCurrent, 1000);
+    
     var hasUser = false;
     var savedUser = localStorage['user'];
     var savedPass = localStorage['pass'];
@@ -245,9 +248,9 @@ function ready() {
         current.className = '';
         $('#stopSliderContainer').show();
         $('#slidetounlock').fadeIn(500);
+        updateCurrent();
     }
-    setInterval(updateCurrent, 1000);
-    updateCurrent();
+
     
     if (!hasUser){
       $(setup).click();
