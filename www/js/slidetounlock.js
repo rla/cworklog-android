@@ -8,8 +8,8 @@ $(function() {
    }
    
    function calcChangeWidth(){
-      var window_btn_offset = 200;
-      var change_width = $(window).width()-window_btn_offset; // < 550 ? $(window).width()-window_btn_offset : 550;
+      var window_btn_offset = 300;
+      var change_width = $(window).width()-window_btn_offset < 550 ? $(window).width()-window_btn_offset : 550;
       return change_width;
    }
 

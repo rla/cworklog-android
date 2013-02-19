@@ -4,24 +4,6 @@ body {
     color: white;
 }
 
-.imglinks{
-  float: right;
-}
-
-#tasks ul {
-    list-style: none;
-    padding: 0.5em 0;
-}
-
-#tasks li {
-    border-top: 1px solid #84bbf3;
-    padding: 1em 0;
-}
-
-#tasks li:last-child {
-    border-bottom: 1px solid #84bbf3;
-}
-
 #current {
     font-size: 1.5em;
     color: red;

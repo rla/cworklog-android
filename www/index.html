@@ -4,8 +4,8 @@
     <title>Contractor's Work Log</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/jquery.mobile-1.3.0-rc.1.min.css">
-    <link rel="stylesheet" href="css/smoothness/jquery-ui-1.10.1.custom.min.css">
+    <link rel="stylesheet" href="js/jquery.mobile-1.3.0-rc.1.min.css">
+    <!-- <link rel="stylesheet" href="css/smoothness/jquery-ui-1.10.1.custom.min.css"> -->
     <link rel="stylesheet" href="css/slidetounlock.css">
     <style>
     #slidetounlock { background: none; background-color: red; }
@@ -13,40 +13,27 @@
     </style>
 </head>
 <body>
-<h3>Contractor's Work Log</h3>
-<div id="message"></div>
-<div id="form" class="hide">
-    <label for="user">Username</label>
-    <input id="user" type="text"></label>
-    <label for="pass">Password</label>
-    <input id="pass" type="password"></label>
-    <button id="setup-ok">
-        <i class="icon-ok"></i> OK
-    </button>
-</div>
-<button id="setup">
-    <i class="icon-cog"></i> Login / Setup
-</button>
-<button id="fetch" disabled>
-    <i class="icon-arrow-down"></i> Fetch tasks
-</button>
-<button id="upload" disabled>
-    <i class="icon-arrow-up"></i> Upload times
-</button>
-<button id="local" disabled>
-    <i class="icon-table"></i> Local timelog
-</button>
-<div id="tasks">
-    <h2>Tasks</h2>
-    <p class="help">Click on item to start.</p>
-    <ul id="list"></ul>
-</div>
+<div data-role="page" id="pgMain" data-theme="a">
+<div data-role="content" data-theme="a">
+<h3 style="text-align: center">Contractor's Work Log</h3>	
+<div style="text-align: center" id="message"></div>
+<a href="#pgConfig" data-mini="true" data-icon="gear" data-role="button" data-theme="b" data-inline="false">Login / Setup</a>
+
+<a href="#" id="fetch" data-mini="true" data-icon="arrow-d" data-role="button" data-theme="a" data-inline="true">Fetch</a>
+<a href="#" id="local" data-mini="true" data-icon="grid" data-role="button" data-theme="a" data-inline="true">&nbsp;</a>
+<a href="#" id="upload" data-mini="true" data-icon="arrow-u" data-role="button" data-theme="a" data-inline="true">Upload</a>
+
+<ul id="list" data-role="listview" data-divider-theme="b" data-inset="true">
+   <li data-role="list-divider" role="heading">
+       0 Tasks (click to start clock)
+   </li>
+</ul>
 <div id="current" class="hide"></div>
 
 
 <div id="stopSliderContainer" class="containing-element" style="display: none">
 		 <audio id="slidetounlock_sound">
-            <source src="sounds/stoptimer.mp3">
+            <source src="/www/sounds/stoptimer.mp3">
        </audio>
       <div id="slidetounlock">
 			<h2><strong id="slider"></strong> <span style="position: relative; top: 20px; margin-top: auto; right: .3em; margin-bottom: auto; float: right;">stop</span></h2>
@@ -54,11 +41,32 @@
 </div>
 
 <div id="timelogs" class="hide">
+    <span id="timelogs_msg"></span>
     <ul id="timelogs-list"></ul>
     <button id="timelogs-close">
         <i class="icon-ok"></i> Close
     </button>
 </div>
+
+</div>
+</div><!-- end main page -->
+
+<div data-role="page" id="pgConfig" data-theme="a">
+	<div data-role="header">
+		<h1>Login / Config</h1>
+	</div><!-- /header -->
+   <div data-role="content" data-theme="a">
+   <div id="form">
+       <label for="user">Username</label>
+       <input id="user" type="text"></label>
+       <label for="pass">Password</label>
+       <input id="pass" type="password"></label>
+       <a href="https://www.cworklog.com/register.php?refer=pgap">No account? Register</a>
+       <p><a href="#pgMain" id="setup-ok" data-direction="reverse" data-role="button" data-theme="b">OK</a></p>	
+   </div>
+   </div>
+</div>
+
 <script src="js/jquery-1.9.1.min.js"></script>
 <script src="js/jquery.mobile-1.3.0-rc.1.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-1.10.1.custom.min.js"></script>
